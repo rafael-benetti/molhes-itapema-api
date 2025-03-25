@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Previsão do Mar - Itapema-SC</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #0277bd;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #0277bd;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🌊 Previsão do Mar - Itapema-SC</h1>
+
+    <!-- Resumo do ChatGPT -->
+    <h2>Resumo Atualizado:</h2>
+    <p id="resumoChatGPT">Carregando resumo...</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Período</th>
+                <th>Direção Onda</th>
+                <th>Vento</th>
+                <th>Temperatura Água</th>
+                <th>Altura Oceânica</th>
+                <th>Altura Praia</th>
+            </tr>
+        </thead>
+        <tbody id="tabelaPrevisao">
+            <tr>
+                <td colspan="8">Carregando...</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        async function carregarPrevisao() {
+            const response = await fetch("/condicoes-mar");
+            const data = await response.json();
+
+            // Exibir resumo do ChatGPT na página
+            document.getElementById("resumoChatGPT").innerText = data.resumoChatGPT;
+
+            // Preencher a tabela com as previsões
+            const tabela = document.getElementById("tabelaPrevisao");
+            tabela.innerHTML = "";
+
+            data.previsoes.forEach(previsao => {
+                tabela.innerHTML += `
+                <tr>
+                    <td>${previsao.data}</td>
+                    <td>${previsao.horario}</td>
+                    <td>${previsao.periodoOnda}</td>
+                    <td>${previsao.direcaoOnda}</td>
+                    <td>${previsao.velocidadeVento} (${previsao.direcaoVento})</td>
+                    <td>${previsao.temperaturaAgua}</td>
+                    <td>${previsao.alturaOceanica}</td>
+                    <td>${previsao.alturaPraia}</td>
+                </tr>
+            `;
+            });
+        }
+
+        carregarPrevisao();
+    </script>
+
+</body>
+
+</html>
